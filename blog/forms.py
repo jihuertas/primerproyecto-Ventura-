@@ -1,5 +1,8 @@
 from django import forms
-from .models import Autor
+from .models import Autor, Post
+from django.contrib.admin.widgets import AdminDateWidget
+from datetime import date
+from django.core.exceptions import ValidationError
 
 class post_form (forms.Form):
     titulo = forms.CharField(label="Título", max_length=200)
@@ -8,4 +11,19 @@ class post_form (forms.Form):
     autor = forms.ModelChoiceField(queryset=Autor.objects.all(), label="Autor")
 
 class post_form_model (forms.ModelForm):
+    fpublicado = forms.DateField(label='Fecha de publicación', 
+                                 input_formats=['%d/%m/%Y', '%Y-%m-%d'],
+                                 widget=forms.DateInput(attrs={
+                                     'class': 'form-control',
+                                     'placeholder': 'dd/mm/aaaa',
+                                     'type':'date'}))
+    class Meta:
+        model = Post
+        fields = ['titulo', 'autor', 'cuerpo', 'fpublicado']
+
+    def clean_fpublicado(self):
+        fpublicado = self.cleaned_data.get('fpublicado')
+        if fpublicado and fpublicado > date.today():
+            raise ValidationError("La fecha de publicación no puede ser mayor que la actual.")
+        return fpublicado
     
