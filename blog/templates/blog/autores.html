@@ -6,7 +6,7 @@
         <h2>Lista de autores</h2>
         <ul>
         {% for autor in autores %}
-            <li>{{autor}}</li>
+            <li><a href="{% url 'autor_detalle' pk=autor.pk %}">{{autor}}</a></li>
         {% endfor%}
         </ul>
 {% endblock%} 

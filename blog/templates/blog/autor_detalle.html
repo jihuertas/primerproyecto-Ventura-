@@ -1,0 +1,14 @@
+<html>
+    <head><title>Mi blog</title></head>
+    <body>
+        <h1>Detalle del autor</h1>
+        <h2>Autor {{autor.nombre}} </h2>
+        <p>{{autor.apellidos}}</p>
+        <p>{{autor.email}}</p>
+        <p>{{autor.dni}}</p>
+        <p>{{autor.bio}}</p>
+
+        <a href="{% url 'autor_del' pk=autor.pk %}">Borrar</a>
+
+    </body>
+</html>

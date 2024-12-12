@@ -12,14 +12,16 @@ class post_form (forms.Form):
 
 class post_form_model (forms.ModelForm):
     fpublicado = forms.DateField(label='Fecha de publicación', 
-                                 input_formats=['%d/%m/%Y', '%Y-%m-%d'],
+                                #  input_formats=['%d/%m/%Y', '%Y-%m-%d'],
                                  widget=forms.DateInput(attrs={
-                                     'class': 'form-control',
-                                     'placeholder': 'dd/mm/aaaa',
+                                    #  'class': 'form-control',
+
+                                    #  'placeholder': 'dd/mm/aaaa',
                                      'type':'date'}))
     class Meta:
         model = Post
-        fields = ['titulo', 'autor', 'cuerpo', 'fpublicado']
+        fields = '__all__' #['titulo', 'autor', 'cuerpo', 'fpublicado']
+
 
     def clean_fpublicado(self):
         fpublicado = self.cleaned_data.get('fpublicado')
@@ -27,3 +29,7 @@ class post_form_model (forms.ModelForm):
             raise ValidationError("La fecha de publicación no puede ser mayor que la actual.")
         return fpublicado
     
+class autor_form_model (forms.ModelForm):
+    class Meta:
+        model = Autor
+        fields = '__all__'

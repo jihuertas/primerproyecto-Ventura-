@@ -1,10 +1,10 @@
 {% extends 'blog/base.html' %}
 
-{%block titulo%}Nuevo post{%endblock%}
+{%block titulo%}Nuevo autor{%endblock%}
 {% block contenido%} 
-        <h2>Nuevo post</h2>
+        <h2>Nuevo autor</h2>
 
-        <form action="{% url 'post_new'%}" method="post">
+        <form action="{% url 'autor_new'%}" method="post">
             {% csrf_token %}
             {{form}}
             <input type="submit" value="Agregar">

@@ -5,7 +5,7 @@
         <h2>Lista de posts</h2>
         <ul>
         {% for post in posts %}
-            <li><a href="{% url 'detalle_post' pk=post.pk %}">{{post}}</a></li>
+            <li><a href="{% url 'post_detalle' pk=post.pk %}">{{post}}</a></li>
         {% endfor%}
         </ul>
         <h2>Lista de autores</h2>

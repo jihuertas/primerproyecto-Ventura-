@@ -1,9 +1,18 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Post, Autor
-from .forms import post_form, post_form_model
+from .forms import post_form, post_form_model, autor_form_model
 
-# Create your views here.
+# POSTs
+def principal(request):
+    posts= Post.objects.all()
+    autores = Post.objects.values_list('autor', flat=True).distinct()
+    return render(request, 'blog/principal.html', {"posts": posts, "autores":autores})
+
+def post_detalle(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'blog/post_detalle.html', {"post":post})
+
 def post_new(request):
     if request.method =='POST':
         form = post_form_model(request.POST)
@@ -14,7 +23,7 @@ def post_new(request):
             # ffpublicado = form.cleaned_data['fpublicado']
             # autor = Autor.objects.get(id=1)
             # Post.objects.create(titulo=ftitulo,autor=autor, cuerpo=fcuerpo, fpublicado=ffpublicado)
-            return render(request, 'blog/post_added.html')
+            return redirect('posts')
     
     else:
         form = post_form_model()
@@ -23,9 +32,8 @@ def post_new(request):
 
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-
     if request.method =='POST':
-        form = post_form_model(request.POST)
+        form = post_form_model(request.POST, instance=post)
         if form.is_valid():
             # post.titulo = form.cleaned_data['titulo']
             # post.cuerpo = form.cleaned_data['cuerpo']
@@ -33,8 +41,7 @@ def post_edit(request, pk):
             # #post.autor = Autor.objects.get(id=1)
             # post.save()
             form.save()
-            return redirect('principal')
-            #return render(request, 'blog/post_added.html')
+            return redirect('posts')
     
     else:
         #form = post_form(initial=post.__dict__)
@@ -43,29 +50,43 @@ def post_edit(request, pk):
     return render(request, 'blog/post_new.html', {"form":form})
 
 
-
-
-def principal(request):
-    posts= Post.objects.all()
-    autores = Post.objects.values_list('autor', flat=True).distinct()
-    return render(request, 'blog/principal.html', {"posts": posts, "autores":autores})
+#### CRUD AUTORES 
 
 def autores(request):
-    autores = Post.objects.values_list('autor', flat=True).distinct()
+    autores = Autor.objects.all()
     return render(request, 'blog/autores.html', {"autores":autores})
 
-def ji(request):
+def autor_detalle(request, pk):
+    autor = get_object_or_404(Autor, pk=pk)
+    return render(request, 'blog/autor_detalle.html', {"autor":autor})
+
+def autor_new(request):
     if request.method == 'POST':
-        nombre = request.POST['nombre1']
-        #Post.objects.create()
-        print (nombre)
-        print (request.POST)
+        form = autor_form_model(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('autores')
+    else:
 
-    return render(request, 'blog/ji.html')
+        form = autor_form_model()
 
+    return render(request, 'blog/autor_new.html', {"form":form})
 
-def detalle(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/detalle.html', {"post":post})
+def autor_del(request, pk):
+    autor = get_object_or_404(Autor, pk=pk)
+    if request.method=="POST":
+        autor.delete()
+        return redirect('autores')
+    else:
+        return render(request, 'blog/autor_del.html', {"autor":autor})
 
-
+def autor_edit(request, pk):
+    autor = get_object_or_404(Autor, pk=pk)
+    if request.method == "POST":
+        form = autor_form_model(request.POST, instance=autor)
+        if form.is_valid():
+            form.save()
+            return redirect('autores')
+    else:
+        form = autor_form_model(instance=autor)
+    return render(request, 'blog/autor_edit.html', {"form":form})

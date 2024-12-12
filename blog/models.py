@@ -23,3 +23,4 @@ class Post(models.Model):
 
     def __str__(self):
         return self.titulo  
+
