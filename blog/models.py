@@ -7,7 +7,8 @@ class Autor (models.Model):
     email = models.EmailField(unique=True)
     dni = models.CharField(unique=True, max_length=9)
     bio = models.TextField(blank=True, verbose_name="Biografía")
-
+    fecha_nacimiento = models.DateField(blank=True,null=True)
+    
     class Meta:
         verbose_name = "Autor"
         verbose_name_plural = "Autores"

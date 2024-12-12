@@ -33,3 +33,10 @@ class autor_form_model (forms.ModelForm):
     class Meta:
         model = Autor
         fields = '__all__'
+
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
+        if fecha_nacimiento > date.today():
+            raise ValidationError("No se admiten viajeros del futuro")
+        
+        return fecha_nacimiento
